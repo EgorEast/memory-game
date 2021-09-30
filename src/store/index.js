@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import anyValSlice from './anyValSlice';
+import gameSlice from './gameSlice';
+import tilesSlice from './tilesSlice';
 
 export const store = configureStore({
 	reducer: {
-		anyVal: anyValSlice,
+		tiles: tilesSlice,
+		game: gameSlice,
 	},
 });
