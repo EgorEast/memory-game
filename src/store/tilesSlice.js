@@ -5,6 +5,7 @@ const tilesSlice = createSlice({
 	initialState: {
 		isClosed: false,
 		isNecesMix: true,
+		checkedTiles: [],
 		collection: [],
 	},
 	reducers: {
@@ -17,9 +18,21 @@ const tilesSlice = createSlice({
 		setCollection(state, action) {
 			state.collection = action.payload;
 		},
+		addCheckedTile(state, action) {
+			state.checkedTiles.push(action.payload);
+		},
+		cleanCheckedTiles(state) {
+			state.checkedTiles = [];
+		},
 	},
 });
 
-export const { setIsClosed, setIsNecesMix, setCollection } = tilesSlice.actions;
+export const {
+	setIsClosed,
+	setIsNecesMix,
+	setCollection,
+	addCheckedTile,
+	cleanCheckedTiles,
+} = tilesSlice.actions;
 
 export default tilesSlice.reducer;
