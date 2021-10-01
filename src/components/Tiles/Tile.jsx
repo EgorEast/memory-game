@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCheckedTile } from '../../store/tilesSlice';
+
 import './Tile.scss';
 
-export const Tile = ({ color }) => {
+export const Tile = ({ color, index }) => {
+	const dispatch = useDispatch();
 	const [isChanged, setIsChanged] = useState(false);
 	const isClosedTiles = useSelector((state) => state.tiles.isClosed);
 	const [classesTitCont, setClassesTitCont] = useState(
@@ -10,24 +13,23 @@ export const Tile = ({ color }) => {
 	);
 
 	useEffect(() => {
-		if (isChanged || !isClosedTiles) {
+		if (isChanged || !isClosedTiles)
 			setClassesTitCont(`tile-container ${color}`);
-		} else setClassesTitCont(`tile-container ${color} changed`);
+		else setClassesTitCont(`tile-container ${color} changed`);
 	}, [color, isChanged, isClosedTiles]);
+
+	const handleTile = () => {
+		setIsChanged(true);
+		dispatch(addCheckedTile({ class: color, id: index }));
+	};
 	return (
-		<div
-			className={classesTitCont}
-			ontouchstart="this.classList.toggle('hover')"
-		>
+		<div className={classesTitCont}>
 			<div className='flipper'>
 				<div className='front'>
-					<div className='tile' onClick={() => setIsChanged(false)}></div>
+					<div className='tile'></div>
 				</div>
 				<div className='back'>
-					<div
-						className={`tile active`}
-						onClick={() => setIsChanged(true)}
-					></div>
+					<div className={`tile active`} id={index} onClick={handleTile}></div>
 				</div>
 			</div>
 		</div>
