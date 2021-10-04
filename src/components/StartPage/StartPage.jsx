@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setIsStartGame, setLvl } from '../../store/gameSlice';
+import { setIsGameStarted, setCurrentLvl } from '../../store/gameSlice';
 import './StartPage.scss';
 
 export const StartPage = () => {
@@ -9,12 +9,15 @@ export const StartPage = () => {
 	return (
 		<div className='start-page'>
 			<button
-				onClick={() => dispatch(setIsStartGame(true))}
+				onClick={() => dispatch(setIsGameStarted(true))}
 				className='start-button'
 			>
 				START
 			</button>
-			<button onClick={() => dispatch(setLvl(0))} className='reset-button'>
+			<button
+				onClick={() => dispatch(setCurrentLvl(1))}
+				className='reset-button'
+			>
 				Reset Level
 			</button>
 		</div>
