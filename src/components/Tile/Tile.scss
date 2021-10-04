@@ -1,6 +1,7 @@
 .tile-container {
+  --margin: 5px;
   perspective: 1000;
-  margin: 5px;
+  margin: var(--margin);
 
   &.changed .flipper {
     transform: rotateY(180deg);
@@ -38,8 +39,10 @@
 .tile-container,
 .front,
 .back {
-  width: 100px;
-  height: 100px;
+  --size-kf: 0.3;
+  --size: calc(100vmin / var(--tile-count) - (var(--margin) * var(--tile-count)));
+  width: var(--size);
+  height: var(--size);
 }
 
 
