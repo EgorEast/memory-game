@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { setIsStartGame, setLvl } from '../store/gameSlice';
+import { setIsStartGame, setLvl } from '../../store/gameSlice';
+import './StartPage.scss';
 
 export const StartPage = () => {
 	const dispatch = useDispatch();

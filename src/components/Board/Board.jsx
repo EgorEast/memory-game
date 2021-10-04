@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tile } from './Tiles/Tile';
-import { setIsClosed, setIsNecesMix, setCollection } from '../store/tilesSlice';
+import { Tile } from '../Tile/Tile';
+import {
+	setIsClosed,
+	setIsNecesMix,
+	setCollection,
+} from '../../store/tilesSlice';
 import {
 	setNumberAllCouplesTiles,
 	setIsStartNextLvl,
-} from '../store/gameSlice';
+} from '../../store/gameSlice';
+
+import './Board.scss';
 
 export const Board = () => {
 	const dispatch = useDispatch();

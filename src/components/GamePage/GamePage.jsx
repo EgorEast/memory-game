@@ -4,7 +4,7 @@ import {
 	setIsClosed,
 	setIsNecesMix,
 	cleanCheckedTiles,
-} from '../store/tilesSlice';
+} from '../../store/tilesSlice';
 import {
 	setIsStartGame,
 	incrementLvl,
@@ -13,9 +13,12 @@ import {
 	incrementCountGuessedCouplesTiles,
 	resetCountGuessedCouplesTiles,
 	setIsCompletedLvl,
-} from '../store/gameSlice';
+} from '../../store/gameSlice';
 
-import { Board } from './Board';
+import { Board } from '../Board/Board';
+
+// import './GamePage.scss';
+import './GamePage.scss';
 
 export const GamePage = () => {
 	const dispatch = useDispatch();
