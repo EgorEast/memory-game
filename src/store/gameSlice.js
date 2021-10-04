@@ -3,55 +3,42 @@ import { createSlice } from '@reduxjs/toolkit';
 const gameSlice = createSlice({
 	name: 'game',
 	initialState: {
-		isStartGame: false,
-		lvl: 0,
-		isStartNextLvl: false,
-		isCompletedLvl: false,
-		isFailedLvl: false,
-		numberAllCouplesTiles: 0,
-		countGuessedCouplesTiles: 0,
+		isGameStarted: false,
+		currentLvl: 1,
+		isLvlStarted: false,
+		isRestartLvl: false,
+		shouldDisableAllCards: false,
+		moves: 0,
 	},
 	reducers: {
-		setIsStartGame(state, action) {
-			state.isStartGame = action.payload;
+		setIsGameStarted(state, action) {
+			state.isGameStarted = action.payload;
 		},
-		incrementLvl(state, action) {
-			state.lvl += action.payload;
+		setCurrentLvl(state, action) {
+			state.currentLvl = action.payload;
 		},
-		setLvl(state, action) {
-			state.lvl = action.payload;
+		setIsLvlStarted(state, action) {
+			state.isLvlStarted = action.payload;
 		},
-		setIsStartNextLvl(state, action) {
-			state.isStartNextLvl = action.payload;
+		setIsRestartLvl(state, action) {
+			state.isRestartLvl = action.payload;
 		},
-		setIsCompletedLvl(state, action) {
-			state.isCompletedLvl = action.payload;
+		setShouldDisableAllCards(state, action) {
+			state.shouldDisableAllCards = action.payload;
 		},
-		setIsFailedLvl(state, action) {
-			state.isFailedLvl = action.payload;
-		},
-		setNumberAllCouplesTiles(state, action) {
-			state.numberAllCouplesTiles = action.payload;
-		},
-		incrementCountGuessedCouplesTiles(state, action) {
-			state.countGuessedCouplesTiles += action.payload;
-		},
-		resetCountGuessedCouplesTiles(state) {
-			state.countGuessedCouplesTiles = 0;
+		setMoves(state, action) {
+			state.moves = action.payload;
 		},
 	},
 });
 
 export const {
-	setIsStartGame,
-	incrementLvl,
-	setLvl,
-	setIsStartNextLvl,
-	setIsCompletedLvl,
-	setIsFailedLvl,
-	setNumberAllCouplesTiles,
-	incrementCountGuessedCouplesTiles,
-	resetCountGuessedCouplesTiles,
+	setIsGameStarted,
+	setCurrentLvl,
+	setIsLvlStarted,
+	setIsRestartLvl,
+	setShouldDisableAllCards,
+	setMoves,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
