@@ -5,9 +5,9 @@ import { GamePage } from './components/GamePage/GamePage';
 import { StartPage } from './components/StartPage/StartPage';
 
 function App() {
-	const isStartGame = useSelector((state) => state.game.isStartGame);
+	const isGameStarted = useSelector((state) => state.game.isGameStarted);
 
-	if (isStartGame) return <GamePage />;
+	if (isGameStarted) return <GamePage />;
 	else return <StartPage />;
 }
 
