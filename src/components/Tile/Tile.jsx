@@ -12,7 +12,14 @@ export const Tile = ({
 	isDisabled,
 }) => {
 	const handleClick = () => {
-		if (!isFlipped && !isDisabled) onClick(index);
+		if (!isFlipped && !isDisabled && !isInactive) onClick(index);
+	};
+
+	const backgrBackFace = () => {
+		if (!isInactive) {
+			return { background: 'black' };
+		}
+		return { background: tile.background };
 	};
 
 	return (
@@ -27,7 +34,7 @@ export const Tile = ({
 				<div className='tile' style={{ background: tile.background }}></div>
 			</div>
 			<div className='tile-face back'>
-				<div className='tile' style={{ background: 'black' }}></div>
+				<div className='tile' style={backgrBackFace()}></div>
 			</div>
 		</div>
 	);

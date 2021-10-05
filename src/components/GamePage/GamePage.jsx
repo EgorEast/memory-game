@@ -1,9 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCollection } from '../../store/tilesSlice';
+import {
+	setCollection,
+	setOpenTiles,
+	addOpenTile,
+	setClearedTiles,
+	addClearedTile,
+} from '../../store/tilesSlice';
 import {
 	setIsGameStarted,
-	setShouldDisableAllCards,
+	incrementCurrentLvl,
+	setShouldDisableAllTiles,
+	setNumOfTilesInSide,
 } from '../../store/gameSlice';
 import { Tile } from '../Tile/Tile';
 
@@ -22,41 +30,104 @@ const uniqueTilesArray = [
 
 const lvlRules = [
 	{ rangeOfLvls: [1, 3], numOfTilesInSide: 2 },
-	{ rangeOfLvls: [4, 8], numOfTilesInSide: 4 },
-	{ rangeOfLvls: [9, 13], numOfTilesInSide: 6 },
+	{ rangeOfLvls: [4, 7], numOfTilesInSide: 4 },
+	{ rangeOfLvls: [8, 11], numOfTilesInSide: 6 },
 ];
 
 export const GamePage = () => {
 	const dispatch = useDispatch();
 	const isGameStarted = useSelector((state) => state.game.isGameStarted);
 	const currentLvl = useSelector((state) => state.game.currentLvl);
-	const isLvlStarted = useSelector((state) => state.game.isLvlStarted);
-	const isRestartLvl = useSelector((state) => state.game.isRestartLvl);
-	const shouldDisableAllCards = useSelector(
-		(state) => state.game.shouldDisableAllCards
+	const shouldDisableAllTiles = useSelector(
+		(state) => state.game.shouldDisableAllTiles
 	);
-	const moves = useSelector((state) => state.game.moves);
-
+	const numOfTilesInSide = useSelector((state) => state.game.numOfTilesInSide);
 	const tilesCollection = useSelector((state) => state.tiles.collection);
 	const openTiles = useSelector((state) => state.tiles.openTiles);
-	const clearedCards = useSelector((state) => state.tiles.clearedCards);
+	const clearedTiles = useSelector((state) => state.tiles.clearedTiles);
 
-	const timeout = useRef(null);
+	const getAllTiles = useCallback(() => {
+		const numUniqueTiles = Math.pow(numOfTilesInSide, 2) / 2;
+		const uniqueTiles = uniqueTilesArray.filter((elem, index) =>
+			index < numUniqueTiles ? elem : null
+		);
+		const allTiles = uniqueTiles.concat(uniqueTiles);
+		return allTiles;
+	}, [numOfTilesInSide]);
 
-	const disable = () => {
-		dispatch(setShouldDisableAllCards(true));
+	const disableAllTiles = () => {
+		dispatch(setShouldDisableAllTiles(true));
 	};
-	const enable = () => {
-		dispatch(setShouldDisableAllCards(false));
+	const enableAllTiles = useCallback(() => {
+		dispatch(setShouldDisableAllTiles(false));
+	}, [dispatch]);
+
+	const checkIsFlipped = (index) => {
+		return openTiles.includes(index);
+	};
+
+	const checkIsInactive = (tile) => {
+		return clearedTiles.includes(tile.type);
+	};
+
+	const resetLvlData = useCallback(() => {
+		dispatch(setClearedTiles([]));
+		dispatch(setOpenTiles([]));
+		dispatch(setShouldDisableAllTiles(false));
+		dispatch(setCollection(shuffleTiles(getAllTiles())));
+	}, [dispatch, getAllTiles]);
+
+	const checkCompletion = useCallback(() => {
+		if (clearedTiles.length === tilesCollection.length / 2) {
+			resetLvlData();
+			dispatch(incrementCurrentLvl());
+		}
+	}, [clearedTiles.length, dispatch, resetLvlData, tilesCollection]);
+
+	const compare = useCallback(() => {
+		const [first, second] = openTiles;
+		enableAllTiles();
+		if (tilesCollection[first].type === tilesCollection[second].type) {
+			dispatch(addClearedTile(tilesCollection[first]));
+			dispatch(setOpenTiles([]));
+			return;
+		}
+
+		setTimeout(() => {
+			dispatch(setOpenTiles([]));
+		}, 500);
+	}, [dispatch, enableAllTiles, openTiles, tilesCollection]);
+
+	const handleClickTile = (index) => {
+		if (openTiles.length === 1) {
+			dispatch(addOpenTile(index));
+			disableAllTiles();
+		} else {
+			dispatch(setOpenTiles([index]));
+		}
 	};
 
 	useEffect(() => {
+		if (openTiles.length === 2) setTimeout(compare, 300);
+	}, [compare, openTiles]);
+
+	useEffect(() => {
+		checkCompletion();
+	}, [checkCompletion]);
+
+	useEffect(() => {
 		if (isGameStarted) {
-			dispatch(
-				setCollection(shuffleTiles(uniqueTilesArray.concat(uniqueTilesArray)))
-			);
+			resetLvlData();
 		}
-	}, [dispatch, isGameStarted]);
+	}, [isGameStarted, resetLvlData]);
+
+	useEffect(() => {
+		lvlRules.forEach((elem) => {
+			const levels = getArrNumbersFromRange(elem.rangeOfLvls);
+			if (levels.includes(currentLvl))
+				dispatch(setNumOfTilesInSide(elem.numOfTilesInSide));
+		});
+	}, [currentLvl, dispatch]);
 
 	return (
 		<div className='game-page'>
@@ -68,17 +139,17 @@ export const GamePage = () => {
 			></button>
 			<div className='current-lvl'>{currentLvl}</div>
 
-			<div className='board' style={{ '--tile-count': 4 }}>
+			<div className='board' style={{ '--tile-count': numOfTilesInSide }}>
 				{tilesCollection.map((tile, index) => {
 					return (
 						<Tile
 							key={tile.type + index}
-							onClick
+							onClick={handleClickTile}
 							tile={tile}
 							index={index}
-							isInactive
-							isFlipped
-							isDisabled
+							isInactive={checkIsInactive(tile)}
+							isFlipped={checkIsFlipped(index)}
+							isDisabled={shouldDisableAllTiles}
 						/>
 					);
 				})}
@@ -93,4 +164,11 @@ const shuffleTiles = (array) => {
 		[array[i], array[j]] = [array[j], array[i]];
 	}
 	return array;
+};
+
+const getArrNumbersFromRange = (arr) => {
+	const [startNum, endNum] = arr;
+	const newArr = [];
+	for (let i = startNum; i <= endNum; i++) newArr.push(i);
+	return newArr;
 };

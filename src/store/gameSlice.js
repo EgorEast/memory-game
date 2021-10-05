@@ -5,10 +5,8 @@ const gameSlice = createSlice({
 	initialState: {
 		isGameStarted: false,
 		currentLvl: 1,
-		isLvlStarted: false,
-		isRestartLvl: false,
-		shouldDisableAllCards: false,
-		moves: 0,
+		shouldDisableAllTiles: false,
+		numOfTilesInSide: 2,
 	},
 	reducers: {
 		setIsGameStarted(state, action) {
@@ -17,17 +15,14 @@ const gameSlice = createSlice({
 		setCurrentLvl(state, action) {
 			state.currentLvl = action.payload;
 		},
-		setIsLvlStarted(state, action) {
-			state.isLvlStarted = action.payload;
+		incrementCurrentLvl(state) {
+			state.currentLvl++;
 		},
-		setIsRestartLvl(state, action) {
-			state.isRestartLvl = action.payload;
+		setShouldDisableAllTiles(state, action) {
+			state.shouldDisableAllTiles = action.payload;
 		},
-		setShouldDisableAllCards(state, action) {
-			state.shouldDisableAllCards = action.payload;
-		},
-		setMoves(state, action) {
-			state.moves = action.payload;
+		setNumOfTilesInSide(state, action) {
+			state.numOfTilesInSide = action.payload;
 		},
 	},
 });
@@ -35,10 +30,9 @@ const gameSlice = createSlice({
 export const {
 	setIsGameStarted,
 	setCurrentLvl,
-	setIsLvlStarted,
-	setIsRestartLvl,
-	setShouldDisableAllCards,
-	setMoves,
+	incrementCurrentLvl,
+	setShouldDisableAllTiles,
+	setNumOfTilesInSide,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

@@ -5,7 +5,7 @@ const tilesSlice = createSlice({
 	initialState: {
 		collection: [],
 		openTiles: [],
-		clearedCards: [],
+		clearedTiles: [],
 	},
 	reducers: {
 		setCollection(state, action) {
@@ -14,13 +14,24 @@ const tilesSlice = createSlice({
 		setOpenTiles(state, action) {
 			state.openTiles = action.payload;
 		},
-		setClearedCards(state, action) {
-			state.clearedCards = action.payload;
+		addOpenTile(state, action) {
+			state.openTiles.push(action.payload);
+		},
+		setClearedTiles(state, action) {
+			state.clearedTiles = action.payload;
+		},
+		addClearedTile(state, action) {
+			state.clearedTiles.push(action.payload.type);
 		},
 	},
 });
 
-export const { setCollection, setOpenTiles, setClearedCards } =
-	tilesSlice.actions;
+export const {
+	setCollection,
+	setOpenTiles,
+	addOpenTile,
+	setClearedTiles,
+	addClearedTile,
+} = tilesSlice.actions;
 
 export default tilesSlice.reducer;
