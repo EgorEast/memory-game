@@ -78,7 +78,10 @@ export const GamePage = () => {
 	}, [dispatch, getAllTiles]);
 
 	const checkCompletion = useCallback(() => {
-		if (clearedTiles.length === tilesCollection.length / 2) {
+		if (
+			clearedTiles.length === tilesCollection.length / 2 &&
+			clearedTiles.length !== 0
+		) {
 			resetLvlData();
 			dispatch(incrementCurrentLvl());
 		}
