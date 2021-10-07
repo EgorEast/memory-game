@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 
 import './Tile.scss';
 
@@ -16,18 +15,21 @@ export const Tile = ({
 	};
 
 	const backgrBackFace = () => {
-		if (!isInactive) {
-			return { background: 'black' };
-		}
-		return { background: tile.background };
+		return isInactive
+			? { background: tile.background }
+			: { background: 'black' };
+	};
+
+	const TileContClasses = () => {
+		const classes = [];
+		if (isFlipped) classes.push('is-flipped');
+		if (isInactive) classes.push('is-inactive');
+		return classes.join(' ');
 	};
 
 	return (
 		<div
-			className={classnames('tile-container', {
-				'is-flipped': isFlipped,
-				'is-inactive': isInactive,
-			})}
+			className={`tile-container ${TileContClasses()}`}
 			onClick={handleClick}
 		>
 			<div className='tile-face front'>
