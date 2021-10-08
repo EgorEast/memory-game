@@ -126,8 +126,8 @@ export const GamePage = () => {
 
 	useEffect(() => {
 		lvlRules.forEach((elem) => {
-			const levels = getArrNumbersFromRange(elem.rangeOfLvls);
-			if (levels.includes(currentLvl))
+			const [startRangeNum, endRangeNum] = elem.rangeOfLvls;
+			if (currentLvl >= startRangeNum && currentLvl <= endRangeNum)
 				dispatch(setNumOfTilesInSide(elem.numOfTilesInSide));
 		});
 	}, [currentLvl, dispatch]);
@@ -167,11 +167,4 @@ const shuffleTiles = (array) => {
 		[array[i], array[j]] = [array[j], array[i]];
 	}
 	return array;
-};
-
-const getArrNumbersFromRange = (arr) => {
-	const [startNum, endNum] = arr;
-	const newArr = [];
-	for (let i = startNum; i <= endNum; i++) newArr.push(i);
-	return newArr;
 };
